@@ -9,22 +9,22 @@ import { LoginAuth } from './dtos/auth.login.dto';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
-  async register(dto: RegisterAuth) {
+  async register(dto: RegisterAuth): Promise<any> {
     return await this.prisma.user.create({
       data: {
         username: dto.username,
         name: dto.name,
-        password: await bcrypt.hash(dto.password, 10),
-      },
+        password: await bcrypt.hash(dto.password, 10)
+      }
     });
   }
 
-  async login(dto: LoginAuth) {
+  async login(dto: LoginAuth): Promise<any> {
     const user = await this.prisma.user.findUnique({
-      where: { username: dto.username },
+      where: { username: dto.username }
     });
 
     if (!user || !(await bcrypt.compare(dto.password, user.password))) {
@@ -32,7 +32,7 @@ export class AuthService {
     }
 
     return {
-      access_token: this.jwtService.sign(user),
+      access_token: this.jwtService.sign(user)
     };
   }
 }
