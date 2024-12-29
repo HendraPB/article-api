@@ -12,17 +12,17 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async register(dto: RegisterAuth): Promise<any> {
-    return await this.prisma.user.create({
+  async register(dto: RegisterAuth) {
+    return this.prisma.user.create({
       data: {
         username: dto.username,
         name: dto.name,
-        password: await bcrypt.hash(dto.password, 10)
-      }
+        password: await bcrypt.hash(dto.password, 10),
+      },
     });
-  }
+}
 
-  async login(dto: LoginAuth): Promise<any> {
+  async login(dto: LoginAuth) {
     const user = await this.prisma.user.findUnique({
       where: { username: dto.username }
     });
@@ -34,5 +34,5 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(user)
     };
-  }
+}
 }
