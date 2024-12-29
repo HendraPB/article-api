@@ -17,10 +17,10 @@ export class AuthService {
       data: {
         username: dto.username,
         name: dto.name,
-        password: await bcrypt.hash(dto.password, 10),
-      },
+        password: await bcrypt.hash(dto.password, 10)
+      }
     });
-}
+  }
 
   async login(dto: LoginAuth) {
     const user = await this.prisma.user.findUnique({
@@ -34,5 +34,5 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(user)
     };
-}
+  }
 }
