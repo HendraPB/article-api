@@ -3,8 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './models/auth/auth.module';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from './validation/validation.pipe';
+import { RolesGuard } from './role/roles.guard';
+import { AuthMiddleware } from './auth/auth.middleware';
 import { TransformMiddleware } from './middlewares/transform.middleware';
 
 @Module({
@@ -15,11 +17,15 @@ import { TransformMiddleware } from './middlewares/transform.middleware';
     {
       provide: APP_PIPE,
       useClass: ZodValidationPipe
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard
     }
   ]
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(TransformMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+    consumer.apply(AuthMiddleware, TransformMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
