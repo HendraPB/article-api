@@ -6,6 +6,12 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      include: {
+        articles: {
+          include: { category: true }
+        }
+      }
+    });
   }
 }

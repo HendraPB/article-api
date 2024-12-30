@@ -13,12 +13,23 @@ export class CategoryService {
   }
 
   async findAll() {
-    return this.prisma.category.findMany();
+    return this.prisma.category.findMany({
+      include: {
+        _count: {
+          select: { articles: true }
+        }
+      }
+    });
   }
 
   async findById(id: number) {
     const category = await this.prisma.category.findUnique({
-      where: { id: id }
+      where: { id: id },
+      include: {
+        _count: {
+          select: { articles: true }
+        }
+      }
     });
 
     if (!category) {

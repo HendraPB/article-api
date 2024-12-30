@@ -23,7 +23,8 @@ export class ArticleService {
 
   async findAll(user_id: number) {
     return this.prisma.article.findMany({
-      where: { user_id: user_id }
+      where: { user_id: user_id },
+      include: { category: true }
     });
   }
 
@@ -32,7 +33,8 @@ export class ArticleService {
       where: {
         id: id,
         user_id: user_id
-      }
+      },
+      include: { category: true }
     });
 
     if (!article) {
