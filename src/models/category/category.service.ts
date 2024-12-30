@@ -22,13 +22,15 @@ export class CategoryService {
     });
 
     if (!category) {
-      throw new NotFoundException('Category not found');
+      throw new NotFoundException('category not found');
     }
 
     return category;
   }
 
   async update(id: number, dto: Category) {
+    await this.findById(id);
+
     return this.prisma.category.update({
       where: { id: id },
       data: { name: dto.name }
@@ -36,6 +38,8 @@ export class CategoryService {
   }
 
   async delete(id: number) {
+    await this.findById(id);
+
     return this.prisma.category.delete({
       where: { id: id }
     });
