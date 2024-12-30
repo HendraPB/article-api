@@ -1,5 +1,5 @@
 import { Injectable, PipeTransform, ArgumentMetadata, BadRequestException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from './../prisma/prisma.service';
 import { ZodSchema, ZodError } from 'zod';
 
 @Injectable()

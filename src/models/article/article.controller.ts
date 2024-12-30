@@ -1,7 +1,7 @@
 import { Controller, Post, Get, Put, Delete, Body, Param, ParseIntPipe } from '@nestjs/common';
 import { ArticleService } from './article.service';
-import { Roles } from 'src/role/roles.decorator';
-import { Auth } from 'src/auth/auth.decorator';
+import { Roles } from './../../role/roles.decorator';
+import { Auth } from './../../auth/auth.decorator';
 import { ArticleDto } from './dtos/article.dto';
 
 @Controller('article')

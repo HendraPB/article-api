@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Roles } from 'src/role/roles.decorator';
+import { Roles } from './../../role/roles.decorator';
 
 @Controller('user')
 @Roles('admin')
