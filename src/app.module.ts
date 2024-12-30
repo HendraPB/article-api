@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ArticleModule } from './models/article/article.module';
 import { CategoryModule } from './models/category/category.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './models/auth/auth.module';
@@ -11,7 +12,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
 import { TransformMiddleware } from './middlewares/transform.middleware';
 
 @Module({
-  imports: [PrismaModule, AuthModule, CategoryModule],
+  imports: [PrismaModule, AuthModule, ArticleModule, CategoryModule],
   controllers: [AppController],
   providers: [
     AppService,
