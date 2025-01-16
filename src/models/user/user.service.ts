@@ -9,7 +9,10 @@ export class UserService {
     return this.prisma.user.findMany({
       include: {
         articles: {
-          include: { category: true }
+          include: {
+            category: true,
+            tags: true
+          }
         }
       }
     });

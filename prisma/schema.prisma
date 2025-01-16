@@ -41,4 +41,11 @@ model Article {
   category_id Int         @map("category_id")
   user        User        @relation(fields: [user_id], references: [id])
   category    Category    @relation(fields: [category_id], references: [id])
+  tags        Tag[]       @relation("ArticleTags")
+}
+
+model Tag {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  articles    Article[]   @relation("ArticleTags")
 }
