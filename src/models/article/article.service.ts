@@ -1,12 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './../../prisma/prisma.service';
 import { Article } from './dtos/article.dto';
+import { TagService } from './../tag/tag.service';
 
 @Injectable()
 export class ArticleService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly tagService: TagService
+  ) {}
 
   async create(user_id: number, dto: Article) {
+    const tags = await this.tagService.findOrCreates(dto);
+
     return this.prisma.article.create({
       data: {
         title: dto.title,
@@ -16,7 +22,14 @@ export class ArticleService {
         },
         category: {
           connect: { id: dto.category_id }
+        },
+        tags: {
+          connect: tags.map((tag) => ({ id: tag.id }))
         }
+      },
+      include: {
+        category: true,
+        tags: true
       }
     });
   }
@@ -24,7 +37,10 @@ export class ArticleService {
   async findAll(user_id: number) {
     return this.prisma.article.findMany({
       where: { user_id: user_id },
-      include: { category: true }
+      include: {
+        category: true,
+        tags: true
+      }
     });
   }
 
@@ -34,7 +50,10 @@ export class ArticleService {
         id: id,
         user_id: user_id
       },
-      include: { category: true }
+      include: {
+        category: true,
+        tags: true
+      }
     });
 
     if (!article) {
@@ -47,6 +66,8 @@ export class ArticleService {
   async update(user_id: number, id: number, dto: Article) {
     await this.findById(id, user_id);
 
+    const tags = await this.tagService.findOrCreates(dto);
+
     return this.prisma.article.update({
       where: { id: id },
       data: {
@@ -54,7 +75,14 @@ export class ArticleService {
         text: dto.text,
         category: {
           connect: { id: dto.category_id }
+        },
+        tags: {
+          set: tags.map((tag) => ({ id: tag.id }))
         }
+      },
+      include: {
+        category: true,
+        tags: true
       }
     });
   }
@@ -63,7 +91,11 @@ export class ArticleService {
     await this.findById(id, user_id);
 
     return this.prisma.article.delete({
-      where: { id: id }
+      where: { id: id },
+      include: {
+        category: true,
+        tags: true
+      }
     });
   }
 }
