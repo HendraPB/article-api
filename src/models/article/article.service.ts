@@ -64,7 +64,7 @@ export class ArticleService {
   }
 
   async update(user_id: number, id: number, dto: Article) {
-    await this.findById(id, user_id);
+    await this.findById(user_id, id);
 
     const tags = await this.tagService.findOrCreates(dto);
 
@@ -88,7 +88,7 @@ export class ArticleService {
   }
 
   async delete(user_id: number, id: number) {
-    await this.findById(id, user_id);
+    await this.findById(user_id, id);
 
     return this.prisma.article.delete({
       where: { id: id },
